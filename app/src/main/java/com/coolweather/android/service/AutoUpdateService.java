@@ -8,7 +8,10 @@ import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.util.Log;
+import android.widget.Toast;
 
+import com.coolweather.android.WeatherActivity;
 import com.coolweather.android.gson.Weather;
 import com.coolweather.android.util.HttpUtil;
 import com.coolweather.android.util.Utility;
@@ -33,7 +36,7 @@ public class AutoUpdateService extends Service {
         updateWeather();
         updateBingPic();
         AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        int anHour = 8 * 60 * 60 * 1000;//这是8小时的毫秒数
+        int anHour = 8*60*60*1000;//这是8小时的毫秒数
         long triggerAtTime = SystemClock.elapsedRealtime() + anHour;
         Intent i = new Intent(this,AutoUpdateService.class);
         PendingIntent pi = PendingIntent.getService(this,0,i,0);
@@ -63,6 +66,7 @@ public class AutoUpdateService extends Service {
                                 .edit();
                         editor.putString("weather",responseText);
                         editor.apply();
+
                     }
                 }
 
@@ -91,6 +95,7 @@ public class AutoUpdateService extends Service {
                 SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(AutoUpdateService.this).edit();
                 editor.putString("bing_pic",bingPic);
                 editor.apply();
+                Log.d("AutoUpdateService","update update update!!!");
             }
         });
     }

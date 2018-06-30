@@ -115,7 +115,9 @@ public class WeatherActivity extends AppCompatActivity {
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+
                 requestWeather(weatherId);
+                loadBingPic();
             }
         });
     }
@@ -184,12 +186,14 @@ public class WeatherActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         Glide.with(WeatherActivity.this).load(bingPic).into(bingPicImg);
+                        swipeRefresh.setRefreshing(false);
                     }
                 });
             }
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
+                swipeRefresh.setRefreshing(false);
             }
 
         });
