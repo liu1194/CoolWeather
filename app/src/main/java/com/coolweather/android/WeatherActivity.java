@@ -46,7 +46,7 @@ public class WeatherActivity extends AppCompatActivity {
 
     private LinearLayout forecastLayout;
 
-    private ImageView bingPicImg;
+    private ImageView bingPicImg,weatherIcon;
 
     public SwipeRefreshLayout swipeRefresh;
 
@@ -79,7 +79,7 @@ public class WeatherActivity extends AppCompatActivity {
         sportText = findViewById(R.id.sport_text);
         forecastLayout = findViewById(R.id.forecast_layout);
         bingPicImg = findViewById(R.id.bing_pic_img);
-
+        weatherIcon = findViewById(R.id.weather_icon);
         swipeRefresh = findViewById(R.id.swipe_refresh);
         swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
 
@@ -210,6 +210,8 @@ public class WeatherActivity extends AppCompatActivity {
             titleUpdateTime.setText(updateTime);
             degreeText.setText(degree);
             weatherInfoText.setText(weatherInfo);
+            //Glide.with(this).load(R.drawable.cloudy).into(weatherIcon);
+            showWeatherIcon(weather);
             forecastLayout.removeAllViews();
             for (Forecast forecast : weather.forecastList) {
                 //List<Forecast> forecast = weather.forecastList;
@@ -229,6 +231,25 @@ public class WeatherActivity extends AppCompatActivity {
                 aqiText.setText(weather.aqi.city.aqi);
                 pm25Text.setText(weather.aqi.city.pm25);
                 qltyText.setText(weather.aqi.city.qlty);
+                //qltyText.setTextColor(Color.CYAN);
+                int i = 0;
+                i = Integer.parseInt(weather.aqi.city.aqi);
+                if (i > 100 && i <= 150){  //轻度污染
+                    qltyText.setTextColor(Color.YELLOW);
+
+                }else if (0 <= i && i <= 50){ //优
+                    qltyText.setTextColor(Color.GREEN);
+
+                }else if (i > 50 && i <= 100){ //良
+                    qltyText.setTextColor(Color.CYAN);
+
+                }else if (i > 150 && i <= 200){ //中度污染
+                    qltyText.setTextColor(Color.parseColor("ffa500"));
+
+                }else { //重度污染
+                    qltyText.setTextColor(Color.RED);
+
+                }
             }
             String comfort = "舒适度" + weather.suggestion.comfort.info;
             String carWash = "洗车指数" + weather.suggestion.carWash.info;
@@ -241,6 +262,57 @@ public class WeatherActivity extends AppCompatActivity {
             startService(intent);
         }else {
             Toast.makeText(this,"AUS获取天气信息失败",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    //显示天气图标信息
+    private void showWeatherIcon(Weather weather){
+        switch (weather.now.more.info){
+            case "多云":
+                Glide.with(this).load(R.drawable.cloudy).into(weatherIcon);
+                break;
+            case "阴":
+                Glide.with(this).load(R.drawable.overcast).into(weatherIcon);
+                break;
+            case "晴":
+                Glide.with(this).load(R.drawable.sunny).into(weatherIcon);
+                break;
+            case "小雨":
+                Glide.with(this).load(R.drawable.light_rain).into(weatherIcon);
+                break;
+            case "阵雨":
+                Glide.with(this).load(R.drawable.shower_rain).into(weatherIcon);
+                break;
+            case "雷阵雨":
+                Glide.with(this).load(R.drawable.thunder_shower).into(weatherIcon);
+                break;
+            case "中雨":
+                Glide.with(this).load(R.drawable.moderate_rain).into(weatherIcon);
+                break;
+            case "大雨":
+                Glide.with(this).load(R.drawable.heavy_rain).into(weatherIcon);
+                break;
+            case "暴雨":
+                Glide.with(this).load(R.drawable.storm_rain).into(weatherIcon);
+                break;
+            case "大暴雨":
+                Glide.with(this).load(R.drawable.heavy_storm).into(weatherIcon);
+                break;
+            case "小到中雨":
+                Glide.with(this).load(R.drawable.light_to_moderate_rain).into(weatherIcon);
+                break;
+            case "中到大雨":
+                Glide.with(this).load(R.drawable.moderate_to_heavy_rain).into(weatherIcon);
+                break;
+            case "大到暴雨":
+                Glide.with(this).load(R.drawable.heavy_rain_to_strom).into(weatherIcon);
+                break;
+            case "特大暴雨":
+                Glide.with(this).load(R.drawable.severe_storm).into(weatherIcon);
+                break;
+            default:
+                Glide.with(this).load(R.drawable.unknow).into(weatherIcon);
+                break;
         }
     }
 }
