@@ -232,24 +232,13 @@ public class WeatherActivity extends AppCompatActivity {
                 pm25Text.setText(weather.aqi.city.pm25);
                 qltyText.setText(weather.aqi.city.qlty);
                 //qltyText.setTextColor(Color.CYAN);
-                int i = 0;
-                i = Integer.parseInt(weather.aqi.city.aqi);
-                if (i > 100 && i <= 150){  //轻度污染
-                    qltyText.setTextColor(Color.YELLOW);
-
-                }else if (0 <= i && i <= 50){ //优
-                    qltyText.setTextColor(Color.GREEN);
-
-                }else if (i > 50 && i <= 100){ //良
-                    qltyText.setTextColor(Color.CYAN);
-
-                }else if (i > 150 && i <= 200){ //中度污染
-                    qltyText.setTextColor(Color.parseColor("ffa500"));
-
-                }else { //重度污染
-                    qltyText.setTextColor(Color.RED);
-
-                }
+//                if (weather.aqi.city.aqi != "NA") {
+//                    int i = 0;
+//                    i = Integer.parseInt(weather.aqi.city.aqi);
+//                    chooseColor(i);
+//                }
+                showAQIColor(weather);
+               // Toast.makeText(this,weather.aqi.city.aqi,Toast.LENGTH_SHORT).show();
             }
             String comfort = "舒适度" + weather.suggestion.comfort.info;
             String carWash = "洗车指数" + weather.suggestion.carWash.info;
@@ -262,6 +251,19 @@ public class WeatherActivity extends AppCompatActivity {
             startService(intent);
         }else {
             Toast.makeText(this,"AUS获取天气信息失败",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    //
+    private void showAQIColor(Weather weather){
+
+        if ("NA".equals(weather.aqi.city.aqi)) {
+            //Toast.makeText(this,weather.aqi.city.aqi,Toast.LENGTH_LONG).show();
+            qltyText.setTextColor(Color.WHITE);
+        }else {
+            int i = 0;
+            i = Integer.parseInt(weather.aqi.city.aqi);
+            chooseColor(i);
         }
     }
 
@@ -313,6 +315,19 @@ public class WeatherActivity extends AppCompatActivity {
             default:
                 Glide.with(this).load(R.drawable.unknow).into(weatherIcon);
                 break;
+        }
+    }
+    private void chooseColor(int i){
+        if (i > 100 && i <= 150){  //轻度污染
+            qltyText.setTextColor(Color.YELLOW);
+        }else if (0 <= i && i <= 50){ //优
+            qltyText.setTextColor(Color.GREEN);
+        }else if (i > 50 && i <= 100){ //良
+            qltyText.setTextColor(Color.CYAN);
+        }else if (i > 150 && i <= 200){ //中度污染
+            qltyText.setTextColor(Color.parseColor("ffa500"));
+        }else { //重度污染
+            qltyText.setTextColor(Color.RED);
         }
     }
 }
